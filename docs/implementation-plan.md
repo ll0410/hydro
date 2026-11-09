@@ -132,19 +132,19 @@ flowchart TD
 
 **任务**
 
-- [ ] uni-app（Vue3 + Vite）工程骨架：`src/pages/`（启动页、登录页、容器宿主页 `pages/webview/index.vue`）
-- [ ] 容器封装 `src/container/`：
-  - [ ] `webview-pool.ts`：预热 2 个实例的池（borrow/return）
-  - [ ] `whitelist.ts`：URL 域名校验，非白名单跳系统浏览器；debug 构建放行并打告警日志
-  - [ ] `debug-bridge.ts`：debug 构建注入 vConsole
-- [ ] 桥原生侧 `src/bridge/`：`protocol-parser.ts`（复用 `@hydro/shared` 守卫）、`auth.ts`（域名+权限级校验）、`dispatcher.ts`（按 ns 路由到插件）
-- [ ] 原生插件 `nativeplugins/HydroBridge/`：
-  - [ ] Android：`addJavascriptInterface` 暴露 `__HYDRO_BRIDGE__.post()`，`evaluateJavascript` 实现回调注入
-  - [ ] iOS：`WKScriptMessageHandler` + `evaluateJavaScript` 回调
-  - [ ] 插件 JS 侧胶水：向 WebView 注入 `window.__HYDRO_BRIDGE__` 与 `window.__bridgeCallback__`
-- [ ] 登录态 `src/store/auth.ts`：token 存原生安全存储（plus.storage / Keychain 封装）
-- [ ] 模板配置 `hydro.config.ts`（Web 入口 / 白名单 / 调试开关）+ `template.json`（模板元信息与变量声明）
-- [ ] 提交：`feat(shell-template): container, native bridge and dual-channel plugin`
+- [x] uni-app（Vue3 + Vite）工程骨架：`src/pages/`（启动页、登录页、容器宿主页 `pages/webview/index.vue`）
+- [x] 容器封装 `src/container/`：
+  - [x] `webview-pool.ts`：预热 2 个实例的池（borrow/return）
+  - [x] `whitelist.ts`：URL 域名校验，非白名单跳系统浏览器；debug 构建放行并打告警日志
+  - [x] `debug-bridge.ts`：debug 构建注入 vConsole
+- [x] 桥原生侧 `src/bridge/`：`protocol-parser.ts`（复用 `@hydro/shared` 守卫）、`auth.ts`（域名+权限级校验）、`dispatcher.ts`（按 ns 路由到插件）
+- [x] 原生插件 `nativeplugins/HydroBridge/`：
+  - [x] Android：`addJavascriptInterface` 暴露 `__HYDRO_BRIDGE__.post()`，`evaluateJavascript` 实现回调注入
+  - [x] iOS：`WKScriptMessageHandler` + `evaluateJavaScript` 回调
+  - [x] 插件 JS 侧胶水：向 WebView 注入 `window.__HYDRO_BRIDGE__` 与 `window.__bridgeCallback__`
+- [x] 登录态 `src/store/auth.ts`：token 存原生安全存储（plus.storage / Keychain 封装）
+- [x] 模板配置 `hydro.config.ts`（Web 入口 / 白名单 / 调试开关）+ `template.json`（模板元信息与变量声明）
+- [x] 提交：`feat(shell-template): container, native bridge and dual-channel plugin`
 
 **人工参与点（执行到此暂停，请求人工）**：HBuilderX 生成自定义基座并打原生插件；真机 / 模拟器联调。
 
@@ -160,12 +160,12 @@ flowchart TD
 
 **任务**
 
-- [ ] `src/request.ts`：fetch 封装，自动经 `bridge.auth.getToken()` 注入 token，401 触发刷新广播
-- [ ] `src/reporter.ts`：埋点上报统一走 `bridge.util.report()`，批量缓冲 + 退出 flush
-- [ ] `src/ui/`：Toast、Loading、NavBar 轻组件（Vue3，无重依赖）
-- [ ] `src/vconsole.ts`：按 URL 参数 `?vconsole=1` 或 debug 环境启用
-- [ ] 单测：request token 注入、reporter 缓冲 flush
-- [ ] 提交：`feat(web-sdk): request, reporter and ui kit`
+- [x] `src/request.ts`：fetch 封装，自动经 `bridge.auth.getToken()` 注入 token，401 触发刷新广播
+- [x] `src/reporter.ts`：埋点上报统一走 `bridge.util.report()`，批量缓冲 + 退出 flush
+- [x] `src/ui/`：Toast、Loading、NavBar 轻组件（Vue3，无重依赖）
+- [x] `src/vconsole.ts`：按 URL 参数 `?vconsole=1` 或 debug 环境启用
+- [x] 单测：request token 注入、reporter 缓冲 flush
+- [x] 提交：`feat(web-sdk): request, reporter and ui kit`
 
 **验收**
 
@@ -178,12 +178,12 @@ flowchart TD
 
 **任务**
 
-- [ ] 交互式初始化（prompts）：项目名、模板（shell 完整 / 最小）、包管理器
-- [ ] 模板渲染：`templates/**` 复制 + 变量替换（项目名等，声明在 `template.json`）
-- [ ] 生成 `.hydro-manifest.json`：`{ frameworkVersion, files: [{ path, hash }] }`（hash 为模板文件 sha256）
-- [ ] 生成 `hydro.config.ts` 默认值、安装依赖、输出后续步骤提示
-- [ ] `bin` 字段 + `npm create hydro` 本地联调（`node packages/create-hydro/bin/index.js`）
-- [ ] 提交：`feat(create-hydro): scaffold projects from templates with manifest`
+- [x] 交互式初始化（prompts）：项目名、模板（shell 完整 / 最小）、包管理器
+- [x] 模板渲染：`templates/**` 复制 + 变量替换（项目名等，声明在 `template.json`）
+- [x] 生成 `.hydro-manifest.json`：`{ frameworkVersion, files: [{ path, hash }] }`（hash 为模板文件 sha256）
+- [x] 生成 `hydro.config.ts` 默认值、安装依赖、输出后续步骤提示
+- [x] `bin` 字段 + `npm create hydro` 本地联调（`node packages/create-hydro/bin/index.js`）
+- [x] 提交：`feat(create-hydro): scaffold projects from templates with manifest`
 
 **验收**
 
