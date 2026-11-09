@@ -1,0 +1,19 @@
+{
+  "name": "@hydro/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hydro CLI：双通道更新（包通道 + 模板通道）与体检",
+  "bin": {
+    "hydro": "./bin/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run"
+  }
+}

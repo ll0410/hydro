@@ -37,6 +37,8 @@ describe('scaffoldProject', () => {
     expect(manifest.files).toHaveLength(result.files.length)
     expect(manifest.files.some((file) => file.path === 'apps/shell/src/App.vue')).toBe(true)
     expect(manifest.files.some((file) => file.path === 'apps/shell/template.json')).toBe(false)
+    // portal 是用户业务代码，不进入受管文件清单
+    expect(manifest.files.some((file) => file.path.startsWith('portals/'))).toBe(false)
 
     const hash = sha256(await fs.readFile(path.join(projectDir, 'apps/shell/src/App.vue')))
     expect(manifest.files.find((file) => file.path === 'apps/shell/src/App.vue')?.hash).toBe(hash)
@@ -58,6 +60,14 @@ describe('scaffoldProject', () => {
     expect(shellPkg.name).toBe('my-app-shell')
     expect(shellPkg.dependencies['@hydro/bridge-sdk']).toMatch(/^link:/)
 
+    // link 改写后 manifest 中的 package.json hash 应同步
+    const shellPkgHash = manifest.files.find(
+      (file) => file.path === 'apps/shell/package.json',
+    )?.hash
+    expect(shellPkgHash).toBe(
+      sha256(await fs.readFile(path.join(projectDir, 'apps/shell/package.json'))),
+    )
+
     const portalPkg = JSON.parse(
       (await fs.readFile(path.join(projectDir, 'portals/order/package.json'), 'utf8')) as string,
     ) as { name: string; dependencies: Record<string, string> }
@@ -66,9 +76,10 @@ describe('scaffoldProject', () => {
 
     const rootPkg = JSON.parse(
       (await fs.readFile(path.join(projectDir, 'package.json'), 'utf8')) as string,
-    ) as { name: string; scripts: Record<string, string> }
+    ) as { name: string; scripts: Record<string, string>; dependencies: Record<string, string> }
     expect(rootPkg.name).toBe('my-app')
     expect(rootPkg.scripts.dev).toContain('my-app-portal')
+    expect(rootPkg.dependencies['@hydro/bridge-sdk']).toMatch(/^link:/)
 
     const shellConfig = (await fs.readFile(
       path.join(projectDir, 'apps/shell/hydro.config.ts'),
@@ -89,7 +100,7 @@ describe('scaffoldProject', () => {
       localPackagesDir: packagesDir,
     })
 
-    expect(result.templateFiles).toBeGreaterThan(0)
+    expect(result.templateFiles).toBe(0)
     await expect(fs.access(path.join(projectDir, 'apps/shell'))).rejects.toBeDefined()
     await expect(
       fs.access(path.join(projectDir, 'portals/order/src/App.vue')),

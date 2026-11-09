@@ -17,6 +17,11 @@
       "key": "whitelist",
       "prompt": "导航白名单（逗号分隔）",
       "default": "[\"https://cdn.example.com\"]"
+    },
+    {
+      "key": "hydroVersion",
+      "prompt": "框架版本",
+      "default": "0.1.0"
     }
   ],
   "ignore": ["template.json", "node_modules", "unpackage"]

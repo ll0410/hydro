@@ -45,6 +45,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  packages/cli: {}
+
   packages/create-hydro: {}
 
   packages/shared: {}

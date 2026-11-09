@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process'
 import { existsSync, promises as fs } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { copyTemplate, readTemplateMeta } from './template.js'
+import { copyTemplate, readTemplateMeta, sha256 } from './template.js'
 import type {
   HydroManifest,
   ManifestFile,
@@ -97,6 +97,11 @@ async function writeRootFiles(
     private: true,
     workspaces: ['apps/*', 'portals/*'],
     scripts: buildRootScripts(packageManager, portalPackage, shellPackage),
+    dependencies: {
+      '@hydro/bridge-sdk': '0.1.0',
+      '@hydro/shared': '0.1.0',
+      '@hydro/web-sdk': '0.1.0',
+    },
   }
   await fs.writeFile(
     path.join(projectDir, 'package.json'),
@@ -196,15 +201,14 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
       })),
     )
   }
-  files.push(
-    ...(await copyTemplate({
-      templateDir: portalDir,
-      targetDir: path.join(projectDir, 'portals', 'order'),
-      prefix: 'portals/order',
-      variables,
-      meta: portalMeta,
-    })),
-  )
+  // portal 属于业务自有代码，不登记进 manifest，后续 update 永不触碰
+  await copyTemplate({
+    templateDir: portalDir,
+    targetDir: path.join(projectDir, 'portals', 'order'),
+    prefix: 'portals/order',
+    variables,
+    meta: portalMeta,
+  })
 
   await writeRootFiles(projectDir, projectName, packageManager, variables, !!shellMeta)
 
@@ -218,6 +222,7 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
 
   const localPackagesDir = detectLocalPackagesDir(options.localPackagesDir)
   if (localPackagesDir) {
+    await linkLocalHydroDeps(path.join(projectDir, 'package.json'), localPackagesDir)
     await linkLocalHydroDeps(
       path.join(projectDir, 'apps', 'shell', 'package.json'),
       localPackagesDir,
@@ -226,6 +231,20 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
       path.join(projectDir, 'portals', 'order', 'package.json'),
       localPackagesDir,
     )
+
+    // 本地 link 改写会改变 package.json 内容，同步更新 manifest hash，避免下次 update 误判为用户修改
+    if (shellMeta) {
+      const shellPackagePath = path.join(projectDir, 'apps', 'shell', 'package.json')
+      const entry = manifest.files.find((file) => file.path === 'apps/shell/package.json')
+      if (entry) {
+        entry.hash = sha256(await fs.readFile(shellPackagePath))
+        await fs.writeFile(
+          path.join(projectDir, '.hydro-manifest.json'),
+          `${JSON.stringify(manifest, null, 2)}\n`,
+          'utf8',
+        )
+      }
+    }
   }
 
   if (options.install ?? true) {
