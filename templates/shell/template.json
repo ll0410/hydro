@@ -1,0 +1,23 @@
+{
+  "name": "shell",
+  "version": "0.1.0",
+  "description": "Hydro uni-app 壳工程模板：容器、桥原生侧与双通道原生插件",
+  "variables": [
+    {
+      "key": "projectName",
+      "prompt": "项目名称",
+      "default": "my-app"
+    },
+    {
+      "key": "webEntry",
+      "prompt": "H5 业务入口地址",
+      "default": "https://cdn.example.com/"
+    },
+    {
+      "key": "whitelist",
+      "prompt": "导航白名单（逗号分隔）",
+      "default": "https://cdn.example.com"
+    }
+  ],
+  "ignore": ["template.json", "node_modules", "unpackage", "nativeplugins"]
+}
