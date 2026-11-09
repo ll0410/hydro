@@ -69,13 +69,13 @@ flowchart TD
 
 **任务**
 
-- [ ] `pnpm init` + 根 `package.json`（`private: true`，scripts：`lint` / `test` / `build`）
-- [ ] `pnpm-workspace.yaml`（仅含 `packages/*`）
-- [ ] 根 `tsconfig.base.json`（strict、`moduleResolution: bundler`、`types: ["vite/client"]`）
-- [ ] ESLint + Prettier 根配置（flat config）、`.editorconfig`、`.gitignore`
-- [ ] 目录占位：`packages/`、`templates/shell/`、`templates/portal/`、`codemods/`、`services/`、`docs/`
-- [ ] CI：`.github/workflows/ci.yml`（install → lint → test，Node 20）
-- [ ] 初始提交：`chore: init monorepo skeleton`
+- [x] `pnpm init` + 根 `package.json`（`private: true`，scripts：`lint` / `test` / `build`）
+- [x] `pnpm-workspace.yaml`（仅含 `packages/*`）
+- [x] 根 `tsconfig.base.json`（strict、`moduleResolution: bundler`、`types: ["vite/client"]`）
+- [x] ESLint + Prettier 根配置（flat config）、`.editorconfig`、`.gitignore`
+- [x] 目录占位：`packages/`、`templates/shell/`、`templates/portal/`、`codemods/`、`services/`、`docs/`
+- [x] CI：`.github/workflows/ci.yml`（install → lint → test，Node 20）
+- [x] 初始提交：`chore: init monorepo skeleton`
 
 **验收**
 
