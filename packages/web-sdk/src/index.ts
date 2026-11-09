@@ -16,4 +16,11 @@ export {
   type ReporterOptions,
 } from './reporter'
 export { Loading, NavBar, Toast } from './ui'
+export {
+  createHttpReportTransport,
+  flushBridgeMetrics,
+  installBridgeMetricsReporter,
+  type HttpTransportOptions,
+  type MetricsSource,
+} from './bridge-metrics'
 export { installVConsole, shouldEnableVConsole, type VConsoleOptions } from './vconsole'

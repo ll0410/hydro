@@ -118,4 +118,47 @@ describe('offline-server', () => {
     const response = await fetch(`${server.url}/download/demo/prod/9.9.9`)
     expect(response.status).toBe(404)
   })
+
+  it('接收 bridge_stats 并聚合成功率 / 平均耗时', async () => {
+    const storageDir = await fs.mkdtemp(path.join(tmpdir(), 'hydro-offline-server-metrics-'))
+    dirs.push(storageDir)
+    const server = await startServer(storageDir)
+
+    const post = await fetch(`${server.url}/metrics`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        app: 'demo',
+        events: [
+          {
+            name: 'bridge_stats',
+            ts: 1,
+            props: {
+              items: [
+                {
+                  name: 'device.scan',
+                  calls: 10,
+                  success: 9,
+                  fail: 1,
+                  timeout: 0,
+                  totalCost: 100,
+                  maxCost: 30,
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    })
+    expect(post.status).toBe(200)
+    expect(((await post.json()) as { accepted: number }).accepted).toBe(1)
+
+    const summary = await fetch(`${server.url}/metrics`)
+    const body = (await summary.json()) as {
+      entries: Array<{ name: string; successRate: number; avgCost: number }>
+    }
+    const entry = body.entries.find((item) => item.name === 'device.scan')
+    expect(entry?.successRate).toBeCloseTo(0.9)
+    expect(entry?.avgCost).toBeCloseTo(10)
+  })
 })

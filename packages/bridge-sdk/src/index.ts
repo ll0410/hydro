@@ -16,6 +16,7 @@ export {
 } from './core'
 export { detectEnv, type BridgeEnv } from './detect-env'
 export { BridgeLogger, type BridgeLogEntry } from './logger'
+export { BridgeMetrics, type BridgeMetricItem } from './metrics'
 export { MockBridge, type MockBridgeOptions } from './mock-bridge'
 export { RealBridge, type BridgeHost, type RealBridgeOptions } from './real-bridge'
 export { buildBridgePanelHtml, createBridgePanel, type VConsolePlugin } from './panel'

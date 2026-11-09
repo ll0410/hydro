@@ -16,6 +16,8 @@ export interface ReporterBridge {
 
 export interface ReporterOptions {
   bridge?: ReporterBridge
+  /** 自定义上报通道；缺省走 bridge.util.report() */
+  transport?: (events: ReporterEvent[]) => Promise<unknown>
   /** 攒够多少条自动上报，默认 10 */
   batchSize?: number
   /** 定时上报间隔（毫秒），<= 0 关闭定时器 */
@@ -36,12 +38,14 @@ export class Reporter {
   private queue: ReporterEvent[] = []
   private timer: ReturnType<typeof setInterval> | null = null
   private readonly bridge: ReporterBridge
+  private readonly transport?: (events: ReporterEvent[]) => Promise<unknown>
   private readonly batchSize: number
   private readonly flushIntervalMs: number
   private readonly now: () => number
 
   constructor(options: ReporterOptions = {}) {
     this.bridge = options.bridge ?? (globalBridge as unknown as ReporterBridge)
+    this.transport = options.transport
     this.batchSize = Math.max(1, options.batchSize ?? 10)
     this.flushIntervalMs = options.flushIntervalMs ?? 5_000
     this.now = options.now ?? (() => Date.now())
@@ -68,7 +72,8 @@ export class Reporter {
     if (this.queue.length === 0) return
     const events = this.queue.splice(0, this.queue.length)
     try {
-      await this.bridge.util.report({ events })
+      if (this.transport) await this.transport(events)
+      else await this.bridge.util.report({ events })
     } catch (error) {
       this.queue.unshift(...events)
       console.warn('[Hydro] 埋点上报失败，数据已回填等待重试', error)

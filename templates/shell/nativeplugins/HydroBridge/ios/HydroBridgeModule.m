@@ -68,6 +68,12 @@ UNI_EXPORT_METHOD(@selector(sendCallback:payload:))
     [self.webView evaluateJavaScript:glue completionHandler:nil];
 }
 
+/** WKWebView 内容进程崩溃（需在容器页面把本模块设为 navigationDelegate） */
+- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
+    NSLog(@"[BRIDGE] webview content process terminated");
+    // TODO: 通过全局事件上报 webview_crash，触发离线包回滚与页面重建
+}
+
 - (WKWebView *)resolveWebView {
     // TODO: 按实际 uni-app / HBuilderX 版本从 uniInstance 获取当前页面 WebView
     return nil;

@@ -1,5 +1,6 @@
 package com.hydro.bridge;
 
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -21,6 +22,11 @@ public class HydroWebViewClient extends WebViewClient {
     public interface OfflineResolver {
         /** 命中返回本地文件路径 / file:// 地址，未命中返回 null */
         String resolve(String url);
+    }
+
+    /** WebView 渲染进程崩溃回调（上报 webview_crash） */
+    public interface CrashReporter {
+        void onRenderProcessGone(String reason);
     }
 
     private final OfflineResolver resolver;
@@ -53,6 +59,16 @@ public class HydroWebViewClient extends WebViewClient {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
+        String reason = detail != null && detail.didCrash() ? "render_process_crash" : "render_process_killed";
+        if (resolver instanceof CrashReporter) {
+            ((CrashReporter) resolver).onRenderProcessGone(reason);
+        }
+        // 返回 true 防止宿主 App 被系统一起杀掉
+        return true;
     }
 
     private String guessMimeType(String path) {

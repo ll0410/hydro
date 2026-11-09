@@ -21,6 +21,26 @@ interface StoredPackage {
   zipPath: string
 }
 
+interface MetricAggregate {
+  name: string
+  calls: number
+  success: number
+  fail: number
+  timeout: number
+  totalCost: number
+  maxCost: number
+}
+
+interface BridgeMetricItem {
+  name: string
+  calls: number
+  success: number
+  fail: number
+  timeout: number
+  totalCost: number
+  maxCost: number
+}
+
 export interface OfflineServerOptions {
   storageDir: string
   secret: string
@@ -127,6 +147,59 @@ export async function createOfflineServer(
 ): Promise<OfflineServerHandle> {
   const storageDir = path.resolve(options.storageDir)
   const index = await loadIndex(storageDir)
+  const metrics = new Map<string, MetricAggregate>()
+
+  function accumulateMetric(item: BridgeMetricItem): void {
+    if (!item || typeof item.name !== 'string') return
+    const current = metrics.get(item.name) ?? {
+      name: item.name,
+      calls: 0,
+      success: 0,
+      fail: 0,
+      timeout: 0,
+      totalCost: 0,
+      maxCost: 0,
+    }
+    current.calls += item.calls ?? 0
+    current.success += item.success ?? 0
+    current.fail += item.fail ?? 0
+    current.timeout += item.timeout ?? 0
+    current.totalCost += item.totalCost ?? 0
+    current.maxCost = Math.max(current.maxCost, item.maxCost ?? 0)
+    metrics.set(item.name, current)
+  }
+
+  async function handleMetricsPost(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const body = (await readJson(req)) as {
+      app?: string
+      events?: Array<{ name?: string; props?: { items?: BridgeMetricItem[] } }>
+    }
+    if (!Array.isArray(body.events)) {
+      sendJson(res, 400, { ok: false, msg: 'invalid metrics payload' })
+      return
+    }
+
+    let accepted = 0
+    for (const event of body.events) {
+      if (event.name !== 'bridge_stats') continue
+      for (const item of event.props?.items ?? []) {
+        accumulateMetric(item)
+        accepted++
+      }
+    }
+    sendJson(res, 200, { ok: true, accepted })
+  }
+
+  function handleMetricsGet(res: ServerResponse): void {
+    const entries = [...metrics.values()]
+      .map((item) => ({
+        ...item,
+        successRate: item.calls > 0 ? item.success / item.calls : 0,
+        avgCost: item.calls > 0 ? item.totalCost / item.calls : 0,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    sendJson(res, 200, { ok: true, entries })
+  }
 
   async function handlePackages(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const body = (await readJson(req)) as {
@@ -236,6 +309,14 @@ export async function createOfflineServer(
       try {
         if (req.method === 'POST' && url.pathname === '/packages') {
           await handlePackages(req, res)
+          return
+        }
+        if (req.method === 'POST' && url.pathname === '/metrics') {
+          await handleMetricsPost(req, res)
+          return
+        }
+        if (req.method === 'GET' && url.pathname === '/metrics') {
+          handleMetricsGet(res)
           return
         }
         if (req.method === 'GET' && url.pathname === '/latest') {

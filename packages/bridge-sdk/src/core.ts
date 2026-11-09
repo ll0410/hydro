@@ -10,6 +10,7 @@ import {
   type EventName,
 } from '@hydro/shared'
 import { BridgeLogger } from './logger'
+import { BridgeMetrics } from './metrics'
 import { createApi } from './api'
 
 /** 构造桥接实例时可注入的通用配置 */
@@ -55,6 +56,7 @@ function genId(): string {
  */
 export abstract class BaseBridge {
   readonly logger: BridgeLogger
+  readonly metrics = new BridgeMetrics()
   protected readonly defaultTimeout: number
   private readonly listeners = new Map<
     EventName,
@@ -103,6 +105,7 @@ export abstract class BaseBridge {
       request,
       response,
     })
+    this.metrics.record(`${ns}.${method}`, response.code, Date.now() - startedAt)
 
     if (response.code !== ErrorCode.Success) {
       throw new BridgeError(response.code, response.msg, response)

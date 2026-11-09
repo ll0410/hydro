@@ -13,6 +13,20 @@
       </section>
 
       <section class="card">
+        <h2>e2e 链路</h2>
+        <p class="hint">壳内依次验证：原生登录 → H5 → 扫码 → 弱网离线包兜底 → 升级提示</p>
+        <div class="actions">
+          <button class="btn ghost" @click="loadToken">读取登录态</button>
+          <button class="btn ghost" @click="checkUpdate">检查更新</button>
+          <button class="btn ghost" @click="showStats">Bridge 指标</button>
+        </div>
+        <p v-if="token" class="result">token：{{ token }}</p>
+        <p v-if="updateStatus" class="result">更新：{{ updateStatus }}</p>
+        <p v-if="stats" class="result">指标：{{ stats }}</p>
+        <p class="hint">弱网场景：离线包命中时由壳容器直接读本地资源，未命中回退网络。</p>
+      </section>
+
+      <section class="card">
         <h2>公共 SDK</h2>
         <button class="btn ghost" @click="toast">Toast 提示</button>
       </section>
@@ -32,6 +46,47 @@ const loading = ref(false)
 const scanResult = ref('')
 const toastVisible = ref(false)
 const toastMessage = ref('')
+const token = ref('')
+const stats = ref('')
+const updateStatus = ref('')
+
+function showToast(message: string): void {
+  toastMessage.value = message
+  toastVisible.value = true
+  setTimeout(() => (toastVisible.value = false), 2000)
+}
+
+async function loadToken(): Promise<void> {
+  loading.value = true
+  try {
+    const result = (await bridge.auth.getToken()) as { token?: string }
+    token.value = result.token ?? '（未登录）'
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : '读取登录态失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+async function checkUpdate(): Promise<void> {
+  loading.value = true
+  try {
+    const result = (await bridge.app.checkUpdate()) as { hasUpdate?: boolean; latest?: string }
+    updateStatus.value = result.hasUpdate ? `发现新版本 ${result.latest ?? ''}` : '已是最新版本'
+    showToast(updateStatus.value)
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : '检查更新失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+function showStats(): void {
+  const items = bridge.metrics.snapshotTotal()
+  stats.value = items.length
+    ? items.map((item) => `${item.name} ${item.calls} 次 / 成功 ${item.success}`).join('；')
+    : '暂无调用'
+}
 
 async function scan(): Promise<void> {
   loading.value = true
@@ -39,18 +94,14 @@ async function scan(): Promise<void> {
     const result = (await bridge.device.scan({ types: ['qrCode'] })) as { text: string }
     scanResult.value = result.text
   } catch (error) {
-    toastMessage.value = error instanceof Error ? error.message : '扫码失败'
-    toastVisible.value = true
-    setTimeout(() => (toastVisible.value = false), 2000)
+    showToast(error instanceof Error ? error.message : '扫码失败')
   } finally {
     loading.value = false
   }
 }
 
 function toast(): void {
-  toastMessage.value = 'Hello Hydro'
-  toastVisible.value = true
-  setTimeout(() => (toastVisible.value = false), 2000)
+  showToast('Hello Hydro')
 }
 </script>
 
@@ -97,6 +148,16 @@ h1 {
 .btn.ghost {
   background: #eff6ff;
   color: #2563eb;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.hint {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
 }
 .result {
   margin-top: 12px;
