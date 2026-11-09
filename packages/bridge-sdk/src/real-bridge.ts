@@ -7,6 +7,15 @@ export interface BridgeHost {
   post(message: string): void
 }
 
+declare global {
+  interface Window {
+    /** 壳原生插件注入的双向通道对象 */
+    __HYDRO_BRIDGE__?: BridgeHost
+    /** 原生 → H5 回调入口 */
+    __bridgeCallback__?: (id: string, payload: unknown) => void
+  }
+}
+
 export interface RealBridgeOptions extends BridgeOptions {
   /** 可注入通道（默认取 window.__HYDRO_BRIDGE__），便于单测 */
   host?: BridgeHost
