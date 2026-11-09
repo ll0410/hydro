@@ -90,14 +90,14 @@ flowchart TD
 
 **任务**
 
-- [ ] `packages/shared/package.json`（name `@hydro/shared`）
-- [ ] 消息协议类型 `src/protocol.ts`：`BridgeRequest`（id/ns/method/params/ts）、`BridgeResponse`（id/code/data/msg）、`ErrorCode` 枚举（0 成功、401/403 鉴权、404 未注册、409 参数、500 原生异常、504 超时）
-- [ ] API 注册表 `src/api-registry.ts`：命名空间 `ui / device / app / auth / pay / media / util`，每个方法标注权限级 `public / protected / private`
-- [ ] 事件契约 `src/events.ts`：`appStateChange`、`tokenRefreshed`、`offlinePackageUpdated`
-- [ ] 版本常量 `src/version.ts`：`PROTOCOL_VERSION`（ Breaking 时 +1 ）
-- [ ] 运行时校验 `src/guard.ts`：`isBridgeRequest()` 类型守卫
-- [ ] 同目录单测：协议类型守卫、注册表完整性（每个 ns 至少 1 方法、权限级合法）
-- [ ] 提交：`feat(shared): bridge protocol types and api registry`
+- [x] `packages/shared/package.json`（name `@hydro/shared`）
+- [x] 消息协议类型 `src/protocol.ts`：`BridgeRequest`（id/ns/method/params/ts）、`BridgeResponse`（id/code/data/msg）、`ErrorCode` 枚举（0 成功、401/403 鉴权、404 未注册、409 参数、500 原生异常、504 超时）
+- [x] API 注册表 `src/api-registry.ts`：命名空间 `ui / device / app / auth / pay / media / util`，每个方法标注权限级 `public / protected / private`
+- [x] 事件契约 `src/events.ts`：`appStateChange`、`tokenRefreshed`、`offlinePackageUpdated`
+- [x] 版本常量 `src/version.ts`：`PROTOCOL_VERSION`（ Breaking 时 +1 ）
+- [x] 运行时校验 `src/guard.ts`：`isBridgeRequest()` 类型守卫
+- [x] 同目录单测：协议类型守卫、注册表完整性（每个 ns 至少 1 方法、权限级合法）
+- [x] 提交：`feat(shared): bridge protocol types and api registry`
 
 **验收**
 
