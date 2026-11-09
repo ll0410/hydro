@@ -249,10 +249,10 @@ flowchart TD
 
 **任务**
 
-- [ ] `packages/offline-packer`：构建产物打 zip、生成 hash 清单（manifest.json）、版本元信息、`pack` / `diff` / `publish` 命令（差量用 bsdiff 的 wasm/js 实现，如 `bsdiff-node`；不可用则 v1 全量包 + 差量 TODO）
-- [ ] `services/offline-server`：Node 服务（MVP 可内存 + 文件存储）——`POST /packages`（上传，验签）、`GET /latest?app=&channel=`（版本查询）、`GET /download/:version`（含差量 `?from=`）、签名下发
-- [ ] 壳侧拦截：容器 `shouldOverrideUrlLoading` / 自定义协议拦截 → 命中离线包读本地，未命中走网络；下载校验 CRC + 签名后落盘，保留旧版本可回滚
-- [ ] 提交：`feat(offline): packer, server and container interception`
+- [x] `packages/offline-packer`：构建产物打 zip、生成 hash 清单（manifest.json）、版本元信息、`pack` / `diff` / `publish` 命令（差量用 bsdiff 的 wasm/js 实现，如 `bsdiff-node`；不可用则 v1 全量包 + 差量 TODO）
+- [x] `services/offline-server`：Node 服务（MVP 可内存 + 文件存储）——`POST /packages`（上传，验签）、`GET /latest?app=&channel=`（版本查询）、`GET /download/:version`（含差量 `?from=`）、签名下发
+- [x] 壳侧拦截：容器 `shouldOverrideUrlLoading` / 自定义协议拦截 → 命中离线包读本地，未命中走网络；下载校验 CRC + 签名后落盘，保留旧版本可回滚
+- [x] 提交：`feat(offline): packer, server and container interception`
 
 **人工参与点**：真机验证差量更新。
 
@@ -265,11 +265,11 @@ flowchart TD
 
 **任务**
 
-- [ ] `bridge.util.report` 打通：bridge-sdk 采集调用成功率/耗时 → `web-sdk/reporter` 缓冲 → 服务端 `/metrics` 接收（offline-server 挂载简单聚合接口）
-- [ ] 壳侧监控：白屏检测（load 超时截图判定交人工）、WebView 崩溃捕获（原生插件 onRenderProcessGone / crash 回调）
-- [ ] e2e demo（`templates/portal` 完整示例）：登录（原生页）→ 进 H5 业务 → 扫码（桥）→ 弱网离线包兜底 → 升级提示
-- [ ] 文档收尾：README（快速开始）、`docs/` 交叉链接检查
-- [ ] 提交：`feat(monitoring): report pipeline and e2e demo`
+- [x] `bridge.util.report` 打通：bridge-sdk 采集调用成功率/耗时 → `web-sdk/reporter` 缓冲 → 服务端 `/metrics` 接收（offline-server 挂载简单聚合接口）
+- [x] 壳侧监控：白屏检测（load 超时截图判定交人工）、WebView 崩溃捕获（原生插件 onRenderProcessGone / crash 回调）
+- [x] e2e demo（`templates/portal` 完整示例）：登录（原生页）→ 进 H5 业务 → 扫码（桥）→ 弱网离线包兜底 → 升级提示
+- [x] 文档收尾：README（快速开始）、`docs/` 交叉链接检查
+- [x] 提交：`feat(monitoring): report pipeline and e2e demo`
 
 **验收**
 
