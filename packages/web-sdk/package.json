@@ -1,0 +1,31 @@
+{
+  "name": "@hydro/web-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hydro H5 公共 SDK：请求、埋点、UI 组件与调试工具",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ui": "./src/ui/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hydro/bridge-sdk": "workspace:*",
+    "@hydro/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "vconsole": "^3.15.0",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "vconsole": "^3.15.1"
+  }
+}
