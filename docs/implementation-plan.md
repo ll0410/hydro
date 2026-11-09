@@ -197,14 +197,14 @@ flowchart TD
 
 **任务**
 
-- [ ] `@hydro/cli` 包骨架（commander 或无依赖手写解析，保持薄）
-- [ ] `hydro update`：读 `.hydro-manifest.json` 版本 → 查 npm 最新 `@hydro/*` → 升级 package.json → 安装
-- [ ] `--to <version>` / `--dry-run` 参数
-- [ ] `changes.json` 规范（随模板版本发布）：`{ version, files: [...], breaking: [...] }`，update 时渲染为人类可读报告
-- [ ] git 工作区干净检测，脏则拒绝执行并提示
-- [ ] 每步自动 commit：`chore(hydro): update deps to x.y.z`
-- [ ] 单测（用临时目录 fixtures 模拟项目）：升级 minor / dry-run 不改文件 / 脏工作区拒绝
-- [ ] 提交：`feat(cli): hydro update dependency channel`
+- [x] `@hydro/cli` 包骨架（commander 或无依赖手写解析，保持薄）
+- [x] `hydro update`：读 `.hydro-manifest.json` 版本 → 查 npm 最新 `@hydro/*` → 升级 package.json → 安装
+- [x] `--to <version>` / `--dry-run` 参数
+- [x] `changes.json` 规范（随模板版本发布）：`{ version, files: [...], breaking: [...] }`，update 时渲染为人类可读报告
+- [x] git 工作区干净检测，脏则拒绝执行并提示
+- [x] 每步自动 commit：`chore(hydro): update deps to x.y.z`
+- [x] 单测（用临时目录 fixtures 模拟项目）：升级 minor / dry-run 不改文件 / 脏工作区拒绝
+- [x] 提交：`feat(cli): hydro update dependency channel`
 
 **验收**
 
@@ -217,12 +217,12 @@ flowchart TD
 
 **任务**
 
-- [ ] manifest hash 对比器：本地文件 vs 旧模板 hash vs 新模板 hash，分类 未改/已改/自有
-- [ ] 未改 → 覆盖并更新 manifest；已改 → v1 输出冲突清单（文件路径 + diff 保存到 `.hydro-conflicts/`）待人工处理；**三方合并（node-diff3）作为可选增强**，`--merge` 开启
-- [ ] 更新完成输出迁移报告：覆盖数 / 冲突数 / 跳过数
-- [ ] manifest 版本号与 package.json 依赖同步对齐（防混搭）
-- [ ] 单测：三种文件状态分类、冲突清单生成、manifest 重写
-- [ ] 提交：`feat(cli): template channel with ownership classification`
+- [x] manifest hash 对比器：本地文件 vs 旧模板 hash vs 新模板 hash，分类 未改/已改/自有
+- [x] 未改 → 覆盖并更新 manifest；已改 → v1 输出冲突清单（文件路径 + diff 保存到 `.hydro-conflicts/`）待人工处理；**三方合并（node-diff3）作为可选增强**，`--merge` 开启
+- [x] 更新完成输出迁移报告：覆盖数 / 冲突数 / 跳过数
+- [x] manifest 版本号与 package.json 依赖同步对齐（防混搭）
+- [x] 单测：三种文件状态分类、冲突清单生成、manifest 重写
+- [x] 提交：`feat(cli): template channel with ownership classification`
 
 **验收**
 
@@ -233,10 +233,10 @@ flowchart TD
 
 **任务**
 
-- [ ] `hydro doctor`：Node 版本 / 依赖版本对齐 / manifest 与 package.json 一致 / 原生插件注册（读模板接线配置）/ 协议版本兼容（shared `PROTOCOL_VERSION`）
-- [ ] codemod runner：按版本顺序执行 `codemods/<version>/*.ts`（jscodeshift），`--yes` 才允许触碰业务文件，产出修改报告
-- [ ] 示例 codemod：`codemods/0.1.0/demo-rename.ts`（演示 API 重命名迁移）
-- [ ] 单测 + 提交：`feat(cli): doctor and codemod runner`
+- [x] `hydro doctor`：Node 版本 / 依赖版本对齐 / manifest 与 package.json 一致 / 原生插件注册（读模板接线配置）/ 协议版本兼容（shared `PROTOCOL_VERSION`）
+- [x] codemod runner：按版本顺序执行 `codemods/<version>/*.ts`（jscodeshift），`--yes` 才允许触碰业务文件，产出修改报告
+- [x] 示例 codemod：`codemods/0.1.0/demo-rename.ts`（演示 API 重命名迁移）
+- [x] 单测 + 提交：`feat(cli): doctor and codemod runner`
 
 **验收**
 
