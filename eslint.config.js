@@ -18,6 +18,15 @@ export default tseslint.config(
   tseslint.configs.recommended,
   prettier,
   {
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+      },
+    },
+  },
+  {
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

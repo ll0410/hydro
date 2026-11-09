@@ -17,8 +17,8 @@ const isProd = typeof process !== 'undefined' && process.env?.NODE_ENV === 'prod
  * 生成项目后按实际环境修改 webEntry / whitelist；debug 构建下白名单校验放行但会打告警。
  */
 const hydroConfig: HydroConfig = {
-  webEntry: isProd ? 'https://cdn.example.com/' : 'http://192.168.1.100:5173/',
-  whitelist: ['https://cdn.example.com', '*.example.com'],
+  webEntry: '{{webEntry}}',
+  whitelist: {{whitelist}},
   debug: !isProd,
   webviewPoolSize: 2,
 }

@@ -1,0 +1,20 @@
+{
+  "name": "create-hydro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hydro 项目脚手架入口：npm create hydro my-app",
+  "bin": {
+    "create-hydro": "./bin/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "bin",
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run"
+  }
+}

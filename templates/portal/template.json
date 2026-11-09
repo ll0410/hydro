@@ -1,0 +1,13 @@
+{
+  "name": "portal",
+  "version": "0.1.0",
+  "description": "Hydro 业务模块模板",
+  "variables": [
+    {
+      "key": "projectName",
+      "prompt": "项目名称",
+      "default": "my-app"
+    }
+  ],
+  "ignore": ["template.json", "node_modules", "dist"]
+}
