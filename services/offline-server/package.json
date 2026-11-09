@@ -1,0 +1,10 @@
+{
+  "name": "hydro-offline-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hydro 离线包版本 / 签名 / 下载服务（MVP）",
+  "scripts": {
+    "dev": "node --experimental-strip-types src/server.ts"
+  }
+}

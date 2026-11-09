@@ -1,0 +1,22 @@
+{
+  "name": "@hydro/offline-packer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hydro 离线包打包 / 差量 / 发布 CLI",
+  "bin": {
+    "hydro-offline": "./bin/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.18"
+  }
+}
