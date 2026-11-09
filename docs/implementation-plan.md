@@ -111,15 +111,15 @@ flowchart TD
 
 **任务**
 
-- [ ] `packages/bridge-sdk/package.json`（依赖 `@hydro/shared`，`exports` 双入口 browser/node）
-- [ ] 环境探测 `src/detect-env.ts`：`window.__HYDRO_BRIDGE__` 存在 → `shell`，否则 `browser`
-- [ ] `src/real-bridge.ts`：postMessage 下行、`window.__bridgeCallback__` 回调上行、`id → pending Promise` 映射、默认 15s 超时 reject
-- [ ] `src/mock-bridge.ts`：fixtures 目录数据、默认 300ms 模拟延迟、可注入失败率/错误码/超时
-- [ ] 统一入口 `src/index.ts`：按环境导出实例 + 类型（从 `@hydro/shared` re-export）
-- [ ] 日志环形缓冲 `src/logger.ts`：最近 200 条 `{ id, ns.method, cost, code }`
-- [ ] vConsole 自定义 tab `src/panel.ts`：展示环形缓冲，可展开完整报文
-- [ ] 单测：invoke 成功/超时/Mock 异常注入/事件总线 `on/off/emit`
-- [ ] 提交：`feat(bridge-sdk): dual-impl bridge with mock, timeout and debug panel`
+- [x] `packages/bridge-sdk/package.json`（依赖 `@hydro/shared`，`exports` 双入口 browser/node）
+- [x] 环境探测 `src/detect-env.ts`：`window.__HYDRO_BRIDGE__` 存在 → `shell`，否则 `browser`
+- [x] `src/real-bridge.ts`：postMessage 下行、`window.__bridgeCallback__` 回调上行、`id → pending Promise` 映射、默认 15s 超时 reject
+- [x] `src/mock-bridge.ts`：fixtures 目录数据、默认 300ms 模拟延迟、可注入失败率/错误码/超时
+- [x] 统一入口 `src/index.ts`：按环境导出实例 + 类型（从 `@hydro/shared` re-export）
+- [x] 日志环形缓冲 `src/logger.ts`：最近 200 条 `{ id, ns.method, cost, code }`
+- [x] vConsole 自定义 tab `src/panel.ts`：展示环形缓冲，可展开完整报文
+- [x] 单测：invoke 成功/超时/Mock 异常注入/事件总线 `on/off/emit`
+- [x] 提交：`feat(bridge-sdk): dual-impl bridge with mock, timeout and debug panel`
 
 **验收**
 
