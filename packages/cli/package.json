@@ -15,5 +15,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run"
+  },
+  "dependencies": {
+    "jscodeshift": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/jscodeshift": "^17.3.0"
   }
 }
